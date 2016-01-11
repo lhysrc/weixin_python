@@ -23,7 +23,7 @@ class NewsItem(object):
 
 class WeiXinMsg(object):
     def __init__(self, xml_body=None):
-        self.xml_body = unicode(xml_body).encode("utf-8")
+        self.xml_body = xml_body#unicode(xml_body).encode("utf-8")
         root = ET.fromstring(self.xml_body)
 
         self.j={}
@@ -37,7 +37,7 @@ class WeiXinMsg(object):
         self.FromUserName = self.j['ToUserName']
         self.MsgType = self.j['MsgType']
         
-        self.MsgId = self.j['MsgId'] if self.j.has_key('MsgId') else ''        
+        self.MsgId = self.j['MsgId'] if self.j.has_key('MsgId') else ''
         self.Content = self.j['Content'] if self.j.has_key('Content') else ''
         self.PicUrl = self.j['PicUrl'] if self.j.has_key('PicUrl') else ''
         self.MediaId = self.j['MediaId'] if self.j.has_key('MediaId') else ''
@@ -50,7 +50,7 @@ class WeiXinMsg(object):
         self.Label = self.j['Label'] if self.j.has_key('Label') else ''
         self.Title = self.j['Title'] if self.j.has_key('Title') else ''
         self.Description = self.j['Description'] if self.j.has_key('Description') else ''
-        self.Url = self.j['Url'] if self.j.has_key('Url') else ''       
+        self.Url = self.j['Url'] if self.j.has_key('Url') else ''
         self.EventKey = self.j['EventKey'] if self.j.has_key('EventKey') else ''
         self.Event = self.j['Event'].lower() if self.j.has_key('Event') else ''
         self.Ticket = self.j['Ticket'].lower() if self.j.has_key('Ticket') else ''
@@ -112,7 +112,7 @@ class WeiXinMsg(object):
 
 
         
-    def resp_music(self,title,desc,music_url,hqmusic_url,funcFlag=0):
+    def resp_music(self, title, desc, music_url, hq_music_url, funcFlag=0):
         '''回复音乐'''
         template='''<xml>
 <ToUserName><![CDATA[%s]]></ToUserName>
@@ -127,8 +127,8 @@ class WeiXinMsg(object):
 </Music>
 <FuncFlag>%s</FuncFlag>
 </xml>'''
-        return template % (self.ToUserName,self.FromUserName,int(time.time()),\
-        title,desc,music_url,hqmusic_url,funcFlag)
+        return template % (self.ToUserName, self.FromUserName, int(time.time()), \
+                           title, desc, music_url, hq_music_url, funcFlag)
             
         
         

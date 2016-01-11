@@ -1,22 +1,54 @@
 #coding:utf-8
+from flask import g
 from api_handler import *
-from WeiXinMsg import NewsItem
 
 TOKEN = 'weixin'
 def onText(wxmsg):
     '''收到文本
     Content	文本消息内容'''
     inTxt = wxmsg.Content
-    #return wxmsg.resp_text(youdao(inTxt))    
-    #if inTxt.startswith('dy'):    
-    newsItems = douban_dianying(inTxt)
-    return wxmsg.resp_text(u'找不到') if newsItems=='' else wxmsg.resp_news(newsItems)
-
-
-    news1 = NewsItem(wxmsg.Content,youdao(wxmsg.Content),"","")
+    #return wxmsg.resp_text(wxmsg['FromUserName'])   
+    #myopenid: ohRN7jn96Bk8QRCAw407RueA-4Nk
+    if(wxmsg['FromUserName'] == 'ohRN7jn96Bk8QRCAw407RueA-4Nk' and inTxt.lower().startswith('n')):
+        return wxmsg.resp_text("n ruan 死了。")
+    
+    
+    
+    if inTxt.lower().startswith('fy'):    
+        return wxmsg.resp_text(youdao(inTxt[2:]))   
+    elif inTxt.startswith('?') or inTxt.startswith(u'？'): 
+        return wxmsg.resp_text(u'''通过发送以下列字符开头的消息可查询相关信息：
+fy  翻译（来自有道）
+!   向我提建议和意见
+dy  电影（来自豆瓣）
+无前缀默认为查询电影''')
+        
+    elif inTxt.startswith('!') or inTxt.startswith(u'！'): 
+        c = g.db.cursor()
+        c.execute("insert into fankui(userid,time,content) values(%s,%s,%s)", \
+                  (wxmsg['FromUserName'],wxmsg['CreateTime'],inTxt[1:].encode('utf-8')))    
+        return wxmsg.resp_text(u'反馈已记录。') 
+    
+    #c.execute('select content from fankui')
+    #msgs = list(c.fetchall())
+    #msgs.reverse()
+    #res = ''
+    #for row in msgs:
+    #    res += row[-1] + ','
+    #return wxmsg.resp_text(res) 
+    
+    
+     
+    else:#
+        if inTxt.startswith('dy'):
+            inTxt = inTxt[2:]
+        newsItems = douban_dianying(inTxt)
+        return wxmsg.resp_text(u'找不到') if newsItems=='' else wxmsg.resp_news(newsItems)
+	
+    #news1 = NewsItem(wxmsg.Content,youdao(wxmsg.Content),"","")
     #news2 = NewsItem("title2","yyyyyyyyyyy","picurl","url")
-    newsItems = [news1]
-    return wxmsg.resp_news(newsItems)
+    #newsItems = [news1]
+    #return wxmsg.resp_news(newsItems)
 
 def onImage(wxmsg):
     '''收到图片
@@ -60,7 +92,7 @@ def onLink(wxmsg):
  
 def onSubscribe(wxmsg):
     '''关注'''
-    return wxmsg.resp_text(u'感谢您的关注。')
+    return wxmsg.resp_text(u'感谢您的关注。你可以发“?”给我查看帮助。')
 
 def onUnsubscribe(wxmsg):
     '''取消关注'''

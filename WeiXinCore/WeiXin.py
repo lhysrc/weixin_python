@@ -1,30 +1,17 @@
 # coding:utf-8
-import time
+#import time
 #import MySQLdb
 from flask import Flask, g, request, make_response
 import hashlib
-import xml.etree.ElementTree as ET
-import urllib2
-import json
-
-from flask import Flask, g, request
+#import xml.etree.ElementTree as ET
+#import urllib2
+#import json
 
 
-#import sys
-#reload(sys)
-#sys.setdefaultencoding('utf-8')
 
-
-#app = Flask(__name__)
-#app.debug = True
-
-#from sae.const import (MYSQL_HOST, MYSQL_HOST_S,
-#    MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB
-#)
-#TOKEN = ''
-
-from myapp import app
-from weixin_handler import *
+from Handlers.weixin_handler import *
+#from index import app
+#from WeiXin.weixin_handler import *
 
 EventType ={
     "subscribe":onSubscribe,
@@ -63,15 +50,17 @@ def check_signature(request_args):
     s = ''.join(s)
     return hashlib.sha1(s).hexdigest() == signature
 
+from FlaskApp import app
 @app.route('/wx', methods = ['GET', 'POST'] )
-def echo():    
-    if not check_signature(request.args) and not app.debug:
+def echo():
+    if not app.debug and not check_signature(request.args):
+        #不在Debug模式下，则需要验证。
         return ""
-    if request.method == 'GET':        
+    if request.method == 'GET':
         return make_response(request.args.get('echostr', ''))      
     else:
         wxmsg = WeiXinMsg(request.data)        
-        respXml = Response[wxmsg.MsgType](wxmsg) if Response.has_key(wxmsg.MsgType) else ''
+        respXml = Response[wxmsg.MsgType](wxmsg) if wxmsg.MsgType in Response else ''
         #return respXml
         response = make_response(respXml)
         response.content_type = 'application/xml'

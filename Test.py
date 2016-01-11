@@ -1,7 +1,7 @@
 #coding:utf-8
 
 
-from WeiXin.WeiXinMsg import *
+from WeiXinCore.WeiXinMsg import *
 
 
 weixin = WeiXinMsg(u'''
