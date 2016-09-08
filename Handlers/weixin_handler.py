@@ -1,5 +1,5 @@
 #coding:utf-8
-from flask import g
+
 from api_handler import *
 
 TOKEN = 'weixin'
@@ -9,9 +9,9 @@ def onText(wxmsg):
     inTxt = wxmsg.Content
     #return wxmsg.resp_text(wxmsg['FromUserName'])   
     #myopenid: ohRN7jn96Bk8QRCAw407RueA-4Nk
-    if(wxmsg['FromUserName'] == 'ohRN7jn96Bk8QRCAw407RueA-4Nk' and inTxt.lower().startswith('n')):
-        return wxmsg.resp_text("n ruan 死了。")
-    
+    # if(wxmsg['FromUserName'] == 'ohRN7jn96Bk8QRCAw407RueA-4Nk' and inTxt.lower().startswith('n')):
+    #     return wxmsg.resp_text("n ruan 死了。")
+    #
     
     
     if inTxt.lower().startswith('fy'):    
@@ -19,15 +19,14 @@ def onText(wxmsg):
     elif inTxt.startswith('?') or inTxt.startswith(u'？'): 
         return wxmsg.resp_text(u'''通过发送以下列字符开头的消息可查询相关信息：
 fy  翻译（来自有道）
-!   向我提建议和意见
 dy  电影（来自豆瓣）
 无前缀默认为查询电影''')
         
-    elif inTxt.startswith('!') or inTxt.startswith(u'！'): 
-        c = g.db.cursor()
-        c.execute("insert into fankui(userid,time,content) values(%s,%s,%s)", \
-                  (wxmsg['FromUserName'],wxmsg['CreateTime'],inTxt[1:].encode('utf-8')))    
-        return wxmsg.resp_text(u'反馈已记录。') 
+    # elif inTxt.startswith('!') or inTxt.startswith(u'！'):
+    #     c = g.db.cursor()
+    #     c.execute("insert into fankui(userid,time,content) values(%s,%s,%s)", \
+    #               (wxmsg['FromUserName'],wxmsg['CreateTime'],inTxt[1:].encode('utf-8')))
+    #     return wxmsg.resp_text(u'反馈已记录。')
     
     #c.execute('select content from fankui')
     #msgs = list(c.fetchall())
@@ -43,7 +42,7 @@ dy  电影（来自豆瓣）
         if inTxt.startswith('dy'):
             inTxt = inTxt[2:]
         newsItems = douban_dianying(inTxt)
-        return wxmsg.resp_text(u'找不到') if newsItems=='' else wxmsg.resp_news(newsItems)
+        return wxmsg.resp_text(u'找不到') if not newsItems else wxmsg.resp_news(newsItems)
 	
     #news1 = NewsItem(wxmsg.Content,youdao(wxmsg.Content),"","")
     #news2 = NewsItem("title2","yyyyyyyyyyy","picurl","url")
@@ -96,7 +95,7 @@ def onSubscribe(wxmsg):
 
 def onUnsubscribe(wxmsg):
     '''取消关注'''
-    return wxmsg.resp_text('oh，漏，你还没说为什么！')
+    return wxmsg.resp_text(u'oh，漏，你还没说为什么！')
 
 def onScan(wxmsg):
     '''扫描二维码'''

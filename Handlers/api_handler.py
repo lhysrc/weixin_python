@@ -30,7 +30,7 @@ def youdao(text):
     #description = json.loads(resp.read())
     if description['errorCode'] is not 0:
         return u'**无法翻译**'
-    return ' '.join(description['translation'])
+    return u' '.join(description['translation'])
     #result = []
     #for k in description['subjects']:
     #    item = {}
@@ -54,5 +54,5 @@ def douban_dianying(text):
         picurl = i['images']['medium']
         url = i['alt']
         genres = '|'.join(i['genres'])
-        items.append(NewsItem("%s (%s)" % (title,rating),'',picurl,url))
+        items.append(NewsItem(u"%s (%s)" % (title,rating),genres,picurl,url))
     return items[:5]

@@ -11,7 +11,7 @@ class NewsItem(object):
         self.pic_url = pic_url
         self.url = url
     def __str__(self):
-        template = '''<item>
+        template = u'''<item>
 <Title><![CDATA[%s]]></Title>
 <Description><![CDATA[%s]]></Description>
 <PicUrl><![CDATA[%s]]></PicUrl>
@@ -84,7 +84,7 @@ class WeiXinMsg(object):
 
             
     def resp_text(self,text,funcFlag=0):
-        template = '''<xml>
+        template = u'''<xml>
 <ToUserName><![CDATA[%s]]></ToUserName>
 <FromUserName><![CDATA[%s]]></FromUserName>
 <CreateTime>%s</CreateTime>
@@ -96,7 +96,7 @@ class WeiXinMsg(object):
 
         
     def resp_news(self,news_items,funcFlag=0):
-        template='''<xml>
+        template=u'''<xml>
 <ToUserName><![CDATA[%s]]></ToUserName>
 <FromUserName><![CDATA[%s]]></FromUserName>
 <CreateTime>%s</CreateTime>
@@ -108,13 +108,13 @@ class WeiXinMsg(object):
 <FuncFlag>%s</FuncFlag>
 </xml>'''
         return template % (self.ToUserName,self.FromUserName,int(time.time()),len(news_items),\
-        (''.join([str(i) for i in news_items])),funcFlag)
+        (u''.join([unicode(i) for i in news_items])),funcFlag)
 
 
         
     def resp_music(self, title, desc, music_url, hq_music_url, funcFlag=0):
         '''回复音乐'''
-        template='''<xml>
+        template=u'''<xml>
 <ToUserName><![CDATA[%s]]></ToUserName>
 <FromUserName><![CDATA[%s]]></FromUserName>
 <CreateTime>%s</CreateTime>
