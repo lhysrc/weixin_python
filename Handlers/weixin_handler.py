@@ -8,11 +8,6 @@ def onText(wxmsg):
     Content	文本消息内容'''
     inTxt = wxmsg.Content
     #return wxmsg.resp_text(wxmsg['FromUserName'])   
-    #myopenid: ohRN7jn96Bk8QRCAw407RueA-4Nk
-    # if(wxmsg['FromUserName'] == 'ohRN7jn96Bk8QRCAw407RueA-4Nk' and inTxt.lower().startswith('n')):
-    #     return wxmsg.resp_text("n ruan 死了。")
-    #
-    
     
     if inTxt.lower().startswith('fy'):    
         return wxmsg.resp_text(youdao(inTxt[2:]))   
